@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: stuff_service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka

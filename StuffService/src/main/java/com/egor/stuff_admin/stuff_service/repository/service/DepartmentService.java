@@ -21,7 +21,7 @@ public class DepartmentService {
                 .get();
     }
 
-    public Department updateEmployee(Department newDepartment) {
+    public Department updateDepartment(Department newDepartment) {
         //TODO: check if such department exists
         Department oldDepartment = getDepartmentById(newDepartment.getId());
         oldDepartment = newDepartment;

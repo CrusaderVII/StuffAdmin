@@ -5,6 +5,8 @@ import com.egor.stuff_admin.stuff_service.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmployeeService {
     @Autowired
@@ -17,6 +19,10 @@ public class EmployeeService {
     public Employee getEmployeeById(long id) {
         return repository.findById(id)
                 .get();
+    }
+
+    public List<Employee> getAllEmployees() {
+        return repository.findAll();
     }
 
     public Employee updateEmployee(Employee newEmployee) {
