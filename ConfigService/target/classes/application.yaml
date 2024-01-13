@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: config_service
+  cloud:
+    config:
+      server:
+        git:
+          uri: C:\MyProjects\StuffAdmin_config
+
+server:
+  port: 8888
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka
