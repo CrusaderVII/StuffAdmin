@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  database:
+    container_name: postgres_stuffadmin
+    image: postgres:alpine3.18
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - net
+
+  stuff-service:
+    container_name: stuff-service
+    image: stuff-service:latest
+    build:
+      context: StuffService
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/stuffadmin
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    depends_on:
+      - discovery-service
+      - database
+      - config-service
+    networks:
+      - net
+
+  discovery-service:
+    container_name: discovery-service
+    image: discovery-service:latest
+    build:
+      context: DiscoveryService
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - net
+
+  config-service:
+    container_name: config-service
+    image: config-service:latest
+    build:
+      context: ConfigService
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge

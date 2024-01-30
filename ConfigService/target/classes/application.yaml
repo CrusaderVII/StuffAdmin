@@ -1,11 +1,12 @@
 spring:
   application:
-    name: config_service
+    name: config-service
   cloud:
     config:
       server:
         git:
           uri: C:\MyProjects\StuffAdmin_config
+          default-label: main
 
 server:
   port: 8888
@@ -13,4 +14,4 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://discovery-service:8761/eureka
+      defaultZone: http://localhost:8761/eureka
