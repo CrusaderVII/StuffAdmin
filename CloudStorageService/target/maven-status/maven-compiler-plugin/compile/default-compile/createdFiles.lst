@@ -1,0 +1,4 @@
+com\egor\stuffadmin\storage\CloudStorageServiceApplication.class
+com\egor\stuffadmin\storage\controller\MainController.class
+com\egor\stuffadmin\storage\service\StorageService.class
+com\egor\stuffadmin\storage\configuration\S3StorageConfiguration.class
