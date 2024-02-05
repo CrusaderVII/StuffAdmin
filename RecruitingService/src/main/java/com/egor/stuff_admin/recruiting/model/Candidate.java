@@ -23,5 +23,5 @@ public class Candidate {
     @Column(name = "candidate_department", nullable = false)
     private String department;
     @Column(name = "candidate_experience")
-    private String experience;
+    private int experience;
 }
