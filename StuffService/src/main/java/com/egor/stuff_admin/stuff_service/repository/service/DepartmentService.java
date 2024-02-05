@@ -2,7 +2,9 @@ package com.egor.stuff_admin.stuff_service.repository.service;
 
 import com.egor.stuff_admin.stuff_service.model.Department;
 import com.egor.stuff_admin.stuff_service.model.Employee;
+import com.egor.stuff_admin.stuff_service.model.EmployeeRequirement;
 import com.egor.stuff_admin.stuff_service.repository.DepartmentRepository;
+import com.egor.stuff_admin.stuff_service.repository.RequirementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +12,17 @@ import org.springframework.stereotype.Service;
 public class DepartmentService {
 
     @Autowired
-    DepartmentRepository repository;
+    DepartmentRepository departmentRepository;
+
+    @Autowired
+    RequirementRepository requirementRepository;
 
     public Department addDepartment(Department department) {
-        return repository.save(department);
+        return departmentRepository.save(department);
     }
 
     public Department getDepartmentById(long id) {
-        return repository.findById(id)
+        return departmentRepository.findById(id)
                 .get();
     }
 
@@ -25,10 +30,22 @@ public class DepartmentService {
         //TODO: check if such department exists
         Department oldDepartment = getDepartmentById(newDepartment.getId());
         oldDepartment = newDepartment;
-        return repository.save(oldDepartment);
+        return departmentRepository.save(oldDepartment);
     }
 
     public void deleteDepartment(Department department) {
-        repository.delete(department);
+        departmentRepository.delete(department);
+    }
+
+    public EmployeeRequirement getRequirementById(long id) {
+        return requirementRepository.findById(id)
+                .get();
+    }
+    public EmployeeRequirement addEmployeeRequirement (EmployeeRequirement requirement) {
+        return requirementRepository.save(requirement);
+    }
+
+    public void deleteEmployeeRequirement(EmployeeRequirement requirement) {
+        requirementRepository.delete(requirement);
     }
 }
