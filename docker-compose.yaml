@@ -11,7 +11,9 @@ services:
       - "5432:5432"
     restart: unless-stopped
     networks:
-      - net
+      backend:
+        aliases:
+            - "database"
 
   stuff-service:
     container_name: stuff-service
@@ -31,7 +33,27 @@ services:
       - database
       - config-service
     networks:
-      - net
+      - backend
+
+  recruiting-service:
+    container_name: recruiting-service
+    image: recruiting-service:latest
+    build:
+      context: RecruitingService
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/stuffadmin_recruiting
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8081:8081"
+    depends_on:
+      - discovery-service
+      - database
+      - config-service
+    networks:
+      - backend
 
   discovery-service:
     container_name: discovery-service
@@ -42,7 +64,9 @@ services:
     ports:
       - "8761:8761"
     networks:
-      - net
+      backend:
+        aliases:
+          - "discovery"
 
   config-service:
     container_name: config-service
@@ -53,8 +77,21 @@ services:
     ports:
       - "8888:8888"
     networks:
-      - net
+      backend:
+        aliases:
+          - "config"
+
+  cloud-storage-service:
+    container_name: cloud-storage-service
+    image: cloud-storage-service:latest
+    build:
+      context: CloudStorageService
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    networks:
+      - backend
 
 networks:
-  net:
+  backend:
     driver: bridge
