@@ -8,7 +8,7 @@ import lombok.*;
 @Entity
 @Table(name = "candidate")
 public class Candidate {
-    @Column(name = "employee_id")
+    @Column(name = "candidate_id")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;

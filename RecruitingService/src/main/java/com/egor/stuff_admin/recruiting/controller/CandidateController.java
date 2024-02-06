@@ -32,12 +32,13 @@ public class CandidateController {
     }
 
     @GetMapping("/requirement")
-    public void getEmployeeRequirement(@RequestParam String department) {
+    public List<Candidate> getEmployeeRequirement(@RequestParam String department) {
         List<Candidate> candidates = candidateService.getCandidateByDepartment(department);
         if (candidates==null) {
             //TODO: implement priority queue of the employee requirements
         } else {
             //TODO: implement email notification for each candidate about free position
         }
+        return candidates;
     }
 }
