@@ -2,6 +2,7 @@ package com.egor.stuff_admin.recruiting.controller;
 
 import com.egor.stuff_admin.recruiting.model.Candidate;
 import com.egor.stuff_admin.recruiting.repository.service.CandidateService;
+import com.egor.stuff_admin.recruiting.repository.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,8 @@ public class CandidateController {
 
     @Autowired
     CandidateService candidateService;
+    @Autowired
+    MailService mailService;
 
     @GetMapping("/candidate/get/{candidateId}")
     public Candidate getCandidateById (@PathVariable long candidateId) {
@@ -36,8 +39,9 @@ public class CandidateController {
         List<Candidate> candidates = candidateService.getCandidateByDepartment(department);
         if (candidates==null) {
             //TODO: implement priority queue of the employee requirements
+
         } else {
-            //TODO: implement email notification for each candidate about free position
+            mailService.sendMessage(candidates);
         }
         return candidates;
     }
