@@ -3,6 +3,7 @@ package com.egor.stuff_admin.stuff_service.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
 @Entity
@@ -18,4 +19,7 @@ public class EmployeeRequirement {
     private Department department;
     @Column(name = "requirement_salary", nullable = false)
     private String salary;
+    @Column(name = "priority", nullable = false)
+    @ColumnDefault("1")
+    private int priority;
 }

@@ -8,6 +8,8 @@ import com.egor.stuff_admin.stuff_service.repository.RequirementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DepartmentService {
 
@@ -24,6 +26,14 @@ public class DepartmentService {
     public Department getDepartmentById(long id) {
         return departmentRepository.findById(id)
                 .get();
+    }
+
+    public Department getDepartmentByName(String name) {
+        return departmentRepository.findByName(name);
+    }
+
+    public List<Department> getAllDepartment() {
+        return departmentRepository.findAll();
     }
 
     public Department updateDepartment(Department newDepartment) {

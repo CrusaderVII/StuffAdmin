@@ -3,10 +3,14 @@ package com.egor.stuff_admin.stuff_service.controller;
 import com.egor.stuff_admin.stuff_service.model.Department;
 import com.egor.stuff_admin.stuff_service.model.Employee;
 import com.egor.stuff_admin.stuff_service.model.EmployeeRequirement;
+import com.egor.stuff_admin.stuff_service.repository.feign.RecruitingFeignClient;
 import com.egor.stuff_admin.stuff_service.repository.service.DepartmentService;
 import com.egor.stuff_admin.stuff_service.repository.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("stuff-admin/api/v1/department")
@@ -17,10 +21,19 @@ public class DepartmentController {
     @Autowired
     EmployeeService employeeService;
 
+    @Autowired
+    RecruitingFeignClient recruitingFeignClient;
+
     @GetMapping("/{id}")
     public Department getDepartmentById(@PathVariable long id) {
         Department department = departmentService.getDepartmentById(id);
         return department;
+    }
+
+    @GetMapping("/all")
+    public List<Department> getAllDepartment() {
+        List<Department> departments = departmentService.getAllDepartment();
+        return departments;
     }
 
     @PostMapping("/save")
@@ -28,9 +41,9 @@ public class DepartmentController {
         return departmentService.addDepartment(department);
     }
 
-    @PostMapping("/{departmentId}/add-employee")
-    public Employee addEmployee(@PathVariable long departmentId, @RequestParam long employeeId) {
-        Department department = departmentService.getDepartmentById(departmentId);
+    @PostMapping("/{departmentName}/add-employee")
+    public Employee addEmployee(@PathVariable String departmentName, @RequestParam long employeeId) {
+        Department department = departmentService.getDepartmentByName(departmentName);
         Employee employee = employeeService.getEmployeeById(employeeId);
 
         department.addEmployee(employee);
@@ -42,10 +55,10 @@ public class DepartmentController {
         return employee;
     }
 
-    @PostMapping("/{departmentId}/add-requirement")
-    public EmployeeRequirement addEmployeeRequirement(@PathVariable long departmentId,
-                                                      @RequestBody EmployeeRequirement requirement) {
-        Department department = departmentService.getDepartmentById(departmentId);
+    @PostMapping("/{departmentName}/add-requirement")
+    public ResponseEntity<Object> addEmployeeRequirement(@PathVariable String departmentName,
+                                                         @RequestBody EmployeeRequirement requirement) {
+        Department department = departmentService.getDepartmentByName(departmentName);
 
         requirement.setDepartment(department);
         department.addRequirement(requirement);
@@ -53,13 +66,13 @@ public class DepartmentController {
         departmentService.updateDepartment(department);
         departmentService.addEmployeeRequirement(requirement);
 
-        return requirement;
+        return recruitingFeignClient.getCandidates(department.getName());
     }
 
-    @DeleteMapping("/{departmentId}/delete-requirement/{requirementId}")
-    public void deleteEmployeeRequirement(@PathVariable long departmentId,
+    @DeleteMapping("/{departmentName}/delete-requirement/{requirementId}")
+    public void deleteEmployeeRequirement(@PathVariable String departmentName,
                                           @PathVariable long requirementId) {
-        Department department = departmentService.getDepartmentById(departmentId);
+        Department department = departmentService.getDepartmentByName(departmentName);
         EmployeeRequirement requirement = departmentService.getRequirementById(requirementId);
 
         department.deleteRequirement(requirement);
