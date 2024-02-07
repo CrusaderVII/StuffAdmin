@@ -92,6 +92,17 @@ services:
     networks:
       - backend
 
+  gateway-service:
+    container_name: gateway-service
+    image: gateway-service:latest
+    build:
+      context: GatewayService
+      dockerfile: Dockerfile
+    ports:
+      - "8072:8072"
+    networks:
+      - backend
+
 networks:
   backend:
     driver: bridge
