@@ -1,17 +1,29 @@
 package com.egor.stuff_admin.recruiting.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Getter @Setter @AllArgsConstructor
-public class CandidateRequest implements Comparable<CandidateRequest> {
+import java.sql.Timestamp;
+
+@Getter @Setter @ToString
+@AllArgsConstructor @NoArgsConstructor
+@Entity
+@Table(name = "request")
+public class CandidateRequest{
+    @Column(name = "request_id")
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private long id;
+    @Column(name = "request_department", nullable = false)
     public String department;
+    @Column(name = "request_priority", columnDefinition = "integer default 1")
     public int priority;
+    @Column(name = "request_time", nullable = false)
+    private Timestamp time;
 
-    @Override
-    public int compareTo(CandidateRequest o) {
-        return Integer.compare(this.priority, o.getPriority());
+    public CandidateRequest(String department, int priority, Timestamp time) {
+        this.department = department;
+        this.priority = priority;
+        this.time = time;
     }
 }

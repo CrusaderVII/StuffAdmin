@@ -60,4 +60,41 @@ public class MailService {
             throw new RuntimeException(e);
         }
     }
+
+    @Async
+    public void sendMessage (Candidate candidate, int numberOfPositions) {
+        String department = candidate.getDepartment();
+
+        Properties properties = new Properties();
+
+        properties.put("mail.host", host);
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(userName, password);
+            }
+        });
+
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.setFrom(new InternetAddress(userName));
+            message.setSubject("Free positions in "+department);
+            message.setText("Hi! We glad to inform you,"
+                    +" that we have "+numberOfPositions+" free positions in "+department+" department. "
+                    +"If you are interested in it, please, contact us back using this email.");
+
+            InternetAddress[] addresses = {new InternetAddress(candidate.getEmail())};
+
+            message.setRecipients(Message.RecipientType.TO, addresses);
+
+            Transport.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
