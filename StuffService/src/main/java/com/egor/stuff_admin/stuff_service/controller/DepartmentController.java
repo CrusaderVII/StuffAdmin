@@ -66,12 +66,14 @@ public class DepartmentController {
         departmentService.updateDepartment(department);
         departmentService.addEmployeeRequirement(requirement);
 
-        return recruitingFeignClient.getCandidates(department.getName());
+        return recruitingFeignClient.getCandidates(department.getName(), requirement.getPriority());
     }
 
     @DeleteMapping("/{departmentName}/delete-requirement/{requirementId}")
     public void deleteEmployeeRequirement(@PathVariable String departmentName,
                                           @PathVariable long requirementId) {
+        //TODO: implement deleting request from recruiting service
+
         Department department = departmentService.getDepartmentByName(departmentName);
         EmployeeRequirement requirement = departmentService.getRequirementById(requirementId);
 
