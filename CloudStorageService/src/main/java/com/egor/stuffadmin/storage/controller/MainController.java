@@ -1,13 +1,11 @@
 package com.egor.stuffadmin.storage.controller;
 
 import com.egor.stuffadmin.storage.service.StorageService;
+import jakarta.ws.rs.HeaderParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -18,9 +16,15 @@ public class MainController {
     StorageService storageService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadPhoto (@RequestParam("file") MultipartFile file,
+    @HeaderParam("Content-Type: multipart/form-data")
+    public ResponseEntity<String> uploadPhoto (@RequestPart("file") MultipartFile file,
                                                @RequestParam("id") String id) {
         storageService.uploadFile(file, id);
         return new ResponseEntity<>("Uploaded successful", HttpStatus.OK);
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<String> downloadPhoto (@RequestParam("id") String id) {
+        return new ResponseEntity<>(storageService.downloadFile(id), HttpStatus.OK) ;
     }
 }

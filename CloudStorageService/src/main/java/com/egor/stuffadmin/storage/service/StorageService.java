@@ -1,6 +1,7 @@
 package com.egor.stuffadmin.storage.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ public class StorageService {
         awsS3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
         fileObj.delete();
         return fileName;
+    }
+
+    public String downloadFile(String id) {
+        return awsS3Client.getObject(new GetObjectRequest(bucketName, id))
+                .getObjectContent()
+                .toString();
     }
 
     private File convertMultiPartFileToFile(MultipartFile file) {
